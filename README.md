@@ -72,6 +72,18 @@ Replace the filename with any `.bin` file inside the `meesho_partitions` folder.
 
 <h2 align="center">WEEK 2 – BIG DATA ANALYTICS PROJECT</h2>
 
+<p align="center">
+  <strong>Distributed MapReduce Engine from Scratch with Custom Hash Partitioning</strong>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Language-Python-blue">
+  <img src="https://img.shields.io/badge/Processing-MapReduce-orange">
+  <img src="https://img.shields.io/badge/Parallelism-Multiprocessing-green">
+  <img src="https://img.shields.io/badge/Domain-Big%20Data%20Analytics-purple">
+  <img src="https://img.shields.io/badge/Status-Completed-success">
+</p>
+
 <hr>
 
 <h2>PROJECT OVERVIEW</h2>
@@ -171,11 +183,17 @@ Rowdy Baby,Yuvan Shankar Raja,Maari 2
 Jimikki Ponnu,Thaman S,Varisu
 </pre>
 
-<p><strong>Primary Analytical Task:</strong></p>
+<p>
+<strong>Primary Analytical Task:</strong>
+</p>
 
 <blockquote>
 Calculate the total number of songs associated with each music director.
 </blockquote>
+
+<p>
+<strong>Current Dataset:</strong> 20 song records
+</p>
 
 <hr>
 
@@ -189,6 +207,9 @@ Calculate the total number of songs associated with each music director.
                               │
                               ▼
                        INPUT SPLITTING
+                              │
+                              ▼
+                   7 MAPPER CHUNKS CREATED
                               │
                ┌──────────────┼──────────────┐
                ▼              ▼              ▼
@@ -236,12 +257,28 @@ The <code>input.txt</code> file contains the Tamil movie song records.
 The main program reads the input file and divides the records into smaller chunks.
 </p>
 
+<p>
+In the current execution, the input data was divided into:
+</p>
+
+<pre>
+Number of Mapper Chunks: 7
+</pre>
+
+<p>
+The workflow can be represented as:
+</p>
+
 <pre>
 Input Dataset
      │
      ├── Chunk 1 → Mapper 1
      ├── Chunk 2 → Mapper 2
-     └── Chunk 3 → Mapper 3
+     ├── Chunk 3 → Mapper 3
+     ├── Chunk 4 → Mapper 4
+     ├── Chunk 5 → Mapper 5
+     ├── Chunk 6 → Mapper 6
+     └── Chunk 7 → Mapper 7
 </pre>
 
 <p>
@@ -308,11 +345,11 @@ The result determines the reducer responsible for processing the key.
 </pre>
 
 <p>
-The main purpose of hash partitioning is to ensure that <strong>all occurrences of the same key are sent to the same reducer</strong>.
+The current project execution uses <strong>2 reducer processes</strong>.
 </p>
 
 <p>
-This is essential for correct aggregation.
+The main purpose of hash partitioning is to ensure that <strong>all occurrences of the same key are sent to the same reducer</strong>. This is essential for correct aggregation.
 </p>
 
 <h3>4. INTERMEDIATE DATA STORAGE</h3>
@@ -347,8 +384,12 @@ Sorting ensures that identical keys are placed together, which makes grouping an
 The reducer receives a key along with all the values associated with that key.
 </p>
 
+<p>
+For example:
+</p>
+
 <pre>
-Anirudh Ravichander → [1, 1, 1, 1, 1]
+Anirudh Ravichander → [1, 1, 1, 1, 1, 1]
 </pre>
 
 <p>
@@ -356,7 +397,7 @@ The reducer calculates:
 </p>
 
 <pre>
-1 + 1 + 1 + 1 + 1 = 5
+1 + 1 + 1 + 1 + 1 + 1 = 6
 </pre>
 
 <p>
@@ -364,7 +405,7 @@ The final result becomes:
 </p>
 
 <pre>
-Anirudh Ravichander 5
+Anirudh Ravichander 6
 </pre>
 
 <p>
@@ -377,20 +418,12 @@ The same process is performed for all music directors.
 After all reducer processes complete their execution, the final aggregated results are generated.
 </p>
 
-<pre>
-Anirudh Ravichander    5
-Santhosh Narayanan     3
-Thaman S               4
-Yuvan Shankar Raja     6
-</pre>
-
 <p>
-The final results can be stored inside:
+The final output is saved to:
 </p>
 
 <pre>
-output/
-└── final_output.txt
+output/final_output.txt
 </pre>
 
 <hr>
@@ -398,7 +431,7 @@ output/
 <h2>PROJECT STRUCTURE</h2>
 
 <pre>
-Spotify_Tamil_Song_MapReduce/
+Spotify_MapReduce/
 │
 ├── main.py
 ├── mapper.py
@@ -424,38 +457,47 @@ Spotify_Tamil_Song_MapReduce/
 <th>FILE / DIRECTORY</th>
 <th>DESCRIPTION</th>
 </tr>
+
 <tr>
 <td><code>main.py</code></td>
 <td>Controls and coordinates the complete MapReduce workflow.</td>
 </tr>
+
 <tr>
 <td><code>mapper.py</code></td>
 <td>Converts input records into intermediate key-value pairs.</td>
 </tr>
+
 <tr>
 <td><code>partitioner.py</code></td>
 <td>Implements custom hash-based partitioning.</td>
 </tr>
+
 <tr>
 <td><code>reducer.py</code></td>
 <td>Aggregates values associated with each music director.</td>
 </tr>
+
 <tr>
 <td><code>input.txt</code></td>
-<td>Contains Tamil movie song records.</td>
+<td>Contains Tamil movie song records used as input data.</td>
 </tr>
+
 <tr>
 <td><code>intermediate/</code></td>
-<td>Stores intermediate partition files.</td>
+<td>Stores intermediate partition files generated during the MapReduce process.</td>
 </tr>
+
 <tr>
 <td><code>output/</code></td>
-<td>Stores final aggregated results.</td>
+<td>Stores the final aggregated results.</td>
 </tr>
+
 <tr>
 <td><code>README.md</code></td>
-<td>Contains project documentation.</td>
+<td>Contains complete project documentation.</td>
 </tr>
+
 </table>
 
 <hr>
@@ -467,38 +509,47 @@ Spotify_Tamil_Song_MapReduce/
 <th>TECHNOLOGY</th>
 <th>USAGE</th>
 </tr>
+
 <tr>
-<td>Python</td>
+<td>Python 3.11.9</td>
 <td>Programming Language</td>
 </tr>
+
 <tr>
 <td>Multiprocessing</td>
-<td>Parallel Processing</td>
+<td>Parallel Mapper and Reducer Processing</td>
 </tr>
+
 <tr>
 <td>MapReduce</td>
-<td>Processing Model</td>
+<td>Data Processing Model</td>
 </tr>
+
 <tr>
 <td>Custom Hash Partitioning</td>
-<td>Data Partitioning</td>
+<td>Intermediate Data Distribution</td>
 </tr>
+
 <tr>
 <td>Local File System</td>
-<td>Intermediate and Final Storage</td>
+<td>Intermediate and Final Data Storage</td>
 </tr>
+
 <tr>
 <td>Visual Studio Code</td>
 <td>Development Environment</td>
 </tr>
+
 <tr>
 <td>Git</td>
 <td>Version Control</td>
 </tr>
+
 <tr>
 <td>GitHub</td>
 <td>Repository Hosting</td>
 </tr>
+
 </table>
 
 <hr>
@@ -508,7 +559,7 @@ Spotify_Tamil_Song_MapReduce/
 <h3>PARALLEL MAPPER PROCESSING</h3>
 
 <p>
-Multiple mapper processes can process different input chunks independently.
+Multiple mapper processes can process different input chunks independently. In the current execution, the dataset was divided into <strong>7 mapper chunks</strong>.
 </p>
 
 <h3>CUSTOM HASH PARTITIONING</h3>
@@ -522,7 +573,7 @@ hash(key) % number_of_reducers
 </pre>
 
 <p>
-to distribute intermediate data among reducers.
+to distribute intermediate data among the reducer processes.
 </p>
 
 <h3>INTERMEDIATE DISK STORAGE</h3>
@@ -540,7 +591,7 @@ Partitioned records are sorted before reduction so that identical keys can be gr
 <h3>PARALLEL REDUCER PROCESSING</h3>
 
 <p>
-Multiple reducers process different partitions independently.
+Multiple reducers process different partitions independently. The current implementation uses <strong>2 reducer processes</strong>.
 </p>
 
 <h3>DATA AGGREGATION</h3>
@@ -564,54 +615,72 @@ The project separates the mapper, partitioner, reducer, and main controller into
 <th>REQUIREMENT</th>
 <th>IMPLEMENTATION</th>
 </tr>
+
 <tr>
 <td>MapReduce Engine</td>
 <td><code>main.py</code></td>
 </tr>
+
 <tr>
 <td>Input Splitting</td>
-<td>Input records divided into chunks</td>
+<td>Input records divided into 7 mapper chunks</td>
 </tr>
+
 <tr>
 <td>Parallel Mapper Processes</td>
 <td>Python multiprocessing</td>
 </tr>
+
 <tr>
 <td>Mapper Logic</td>
 <td><code>mapper.py</code></td>
 </tr>
+
 <tr>
 <td>Intermediate Key-Value Pairs</td>
 <td><code>(Music Director, 1)</code></td>
 </tr>
+
 <tr>
 <td>Custom Hash Partitioning</td>
 <td><code>partitioner.py</code></td>
 </tr>
+
 <tr>
 <td>Partition Formula</td>
 <td><code>hash(key) % number_of_reducers</code></td>
 </tr>
+
+<tr>
+<td>Number of Reducers</td>
+<td>2</td>
+</tr>
+
 <tr>
 <td>Intermediate Storage</td>
 <td><code>intermediate/partition_*.txt</code></td>
 </tr>
+
 <tr>
 <td>Sorting</td>
 <td>Partition records sorted by key</td>
 </tr>
+
 <tr>
 <td>Parallel Reducer Processes</td>
 <td>Python multiprocessing</td>
 </tr>
+
 <tr>
 <td>Aggregation</td>
 <td><code>reducer.py</code></td>
 </tr>
+
 <tr>
 <td>Final Results</td>
 <td><code>output/final_output.txt</code></td>
 </tr>
+
 </table>
 
 <hr>
@@ -624,7 +693,17 @@ The project separates the mapper, partitioner, reducer, and main controller into
 Install <strong>Python 3.x</strong> on your system.
 </p>
 
-<p>Check the Python version:</p>
+<p>
+The project was successfully executed using:
+</p>
+
+<pre>
+Python 3.11.9
+</pre>
+
+<p>
+Check the Python version:
+</p>
 
 <pre>
 python --version
@@ -633,7 +712,7 @@ python --version
 <h3>STEP 1: NAVIGATE TO THE PROJECT DIRECTORY</h3>
 
 <pre>
-cd WEEK-2/Spotify_Tamil_Song_MapReduce
+cd D:\BIG DATA\Spotify_MapReduce
 </pre>
 
 <h3>STEP 2: RUN THE MAPREDUCE ENGINE</h3>
@@ -642,12 +721,14 @@ cd WEEK-2/Spotify_Tamil_Song_MapReduce
 python main.py
 </pre>
 
-<p>The program performs:</p>
+<p>The program performs the following operations:</p>
 
 <pre>
 Input Reading
       ↓
 Input Splitting
+      ↓
+7 Mapper Chunks Created
       ↓
 Parallel Mapping
       ↓
@@ -668,13 +749,17 @@ Final Output
 
 <h3>STEP 3: CHECK THE OUTPUT</h3>
 
-<p>The final output can be viewed in:</p>
+<p>
+The final output can be viewed in:
+</p>
 
 <pre>
 output/final_output.txt
 </pre>
 
-<p>The intermediate partition files can be viewed in:</p>
+<p>
+The intermediate partition files can be viewed in:
+</p>
 
 <pre>
 intermediate/
@@ -682,55 +767,183 @@ intermediate/
 
 <hr>
 
-<h2>SAMPLE OUTPUT</h2>
+<h2>ACTUAL EXECUTION OUTPUT</h2>
 
 <pre>
-==================================================
+============================================================
 SPOTIFY TAMIL MOVIE SONG MAPREDUCE ENGINE
-==================================================
+============================================================
 
 Input Split Completed
+Number of Mapper Chunks: 7
+
 Mapper Processes Completed
+
+Intermediate Key-Value Pairs:
+(Anirudh Ravichander, 1)
+(Anirudh Ravichander, 1)
+(Anirudh Ravichander, 1)
+(Anirudh Ravichander, 1)
+(Anirudh Ravichander, 1)
+(Anirudh Ravichander, 1)
+(Thaman S, 1)
+(Thaman S, 1)
+(Thaman S, 1)
+(Yuvan Shankar Raja, 1)
+(Yuvan Shankar Raja, 1)
+(Yuvan Shankar Raja, 1)
+(Santhosh Narayanan, 1)
+(Santhosh Narayanan, 1)
+(Santhosh Narayanan, 1)
+(Justin Prabhakaran, 1)
+(Pradeep Kumar, 1)
+(Darbuka Siva, 1)
+(Nivas K Prasanna, 1)
+(Gopi Sundar, 1)
+
 Hash Partitioning Completed
-Intermediate Data Stored
 Sorting Completed
 Reducer Processes Completed
 
-==================================================
-FINAL OUTPUT
-==================================================
+============================================================
+FINAL SPOTIFY TAMIL MOVIE SONG ANALYSIS
+============================================================
 
-Anirudh Ravichander    5
-Santhosh Narayanan     3
-Thaman S               4
-Yuvan Shankar Raja     6
+Music Director: Anirudh Ravichander | Total Songs: 6
+Music Director: Darbuka Siva | Total Songs: 1
+Music Director: Gopi Sundar | Total Songs: 1
+Music Director: Justin Prabhakaran | Total Songs: 1
+Music Director: Nivas K Prasanna | Total Songs: 1
+Music Director: Pradeep Kumar | Total Songs: 1
+Music Director: Santhosh Narayanan | Total Songs: 3
+Music Director: Thaman S | Total Songs: 3
+Music Director: Yuvan Shankar Raja | Total Songs: 3
 
-==================================================
-MAPREDUCE JOB COMPLETED SUCCESSFULLY
-==================================================
+Final Output Saved To:
+output/final_output.txt
+
+MapReduce Job Completed Successfully!
 </pre>
 
-<p>
-<strong>Note:</strong> The exact output depends on the records available in <code>input.txt</code>.
-</p>
+<hr>
+
+<h2>FINAL ANALYSIS SUMMARY</h2>
+
+<table>
+<tr>
+<th>MUSIC DIRECTOR</th>
+<th>TOTAL SONGS</th>
+</tr>
+
+<tr>
+<td>Anirudh Ravichander</td>
+<td>6</td>
+</tr>
+
+<tr>
+<td>Darbuka Siva</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>Gopi Sundar</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>Justin Prabhakaran</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>Nivas K Prasanna</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>Pradeep Kumar</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>Santhosh Narayanan</td>
+<td>3</td>
+</tr>
+
+<tr>
+<td>Thaman S</td>
+<td>3</td>
+</tr>
+
+<tr>
+<td>Yuvan Shankar Raja</td>
+<td>3</td>
+</tr>
+
+</table>
+
+<h3>EXECUTION SUMMARY</h3>
+
+<table>
+<tr>
+<th>METRIC</th>
+<th>RESULT</th>
+</tr>
+
+<tr>
+<td>Total Records Processed</td>
+<td>20</td>
+</tr>
+
+<tr>
+<td>Number of Mapper Chunks</td>
+<td>7</td>
+</tr>
+
+<tr>
+<td>Number of Reducers</td>
+<td>2</td>
+</tr>
+
+<tr>
+<td>Unique Music Directors</td>
+<td>9</td>
+</tr>
+
+<tr>
+<td>Highest Song Count</td>
+<td>Anirudh Ravichander – 6 Songs</td>
+</tr>
+
+<tr>
+<td>Final Output File</td>
+<td><code>output/final_output.txt</code></td>
+</tr>
+
+<tr>
+<td>Execution Status</td>
+<td>MapReduce Job Completed Successfully</td>
+</tr>
+
+</table>
 
 <hr>
 
 <h2>LEARNING OUTCOMES</h2>
 
 <ul>
-<li>MapReduce programming model.</li>
-<li>Parallel data processing.</li>
-<li>Python multiprocessing.</li>
-<li>Input splitting.</li>
-<li>Mapper and reducer architecture.</li>
-<li>Intermediate key-value processing.</li>
-<li>Custom hash partitioning.</li>
-<li>Local disk-based intermediate storage.</li>
-<li>Sorting and grouping.</li>
-<li>Data aggregation.</li>
-<li>Distributed processing concepts.</li>
-<li>Modular Python application development.</li>
+<li>Understanding the MapReduce programming model.</li>
+<li>Implementing parallel data processing using Python.</li>
+<li>Working with Python multiprocessing.</li>
+<li>Understanding input splitting and mapper execution.</li>
+<li>Implementing mapper and reducer architecture.</li>
+<li>Generating intermediate key-value pairs.</li>
+<li>Implementing custom hash partitioning.</li>
+<li>Understanding local disk-based intermediate storage.</li>
+<li>Performing sorting and grouping of intermediate data.</li>
+<li>Aggregating data using reducer processes.</li>
+<li>Understanding distributed processing concepts.</li>
+<li>Developing a modular Python-based data processing application.</li>
 </ul>
 
 <hr>
@@ -761,11 +974,15 @@ The <strong>Spotify Tamil Movie Song Analytics Using Distributed MapReduce Engin
 </p>
 
 <p>
-The system follows the complete MapReduce data-processing pipeline, beginning with <strong>input splitting and parallel mapping</strong>, followed by <strong>intermediate key-value generation, custom hash partitioning, local disk storage, sorting, and parallel reduction</strong>.
+The system successfully follows the complete MapReduce data-processing pipeline, beginning with <strong>input splitting and parallel mapping</strong>, followed by <strong>intermediate key-value generation, custom hash partitioning, local disk storage, sorting, and parallel reduction</strong>.
 </p>
 
 <p>
-The project demonstrates how large datasets can be divided into smaller processing tasks and handled concurrently using independent mapper and reducer processes. By applying the MapReduce model to Tamil movie song data, the system efficiently aggregates song information based on music directors.
+In the current execution, <strong>20 Tamil movie song records</strong> were divided into <strong>7 mapper chunks</strong> and processed using parallel mapper processes. The generated intermediate key-value pairs were distributed using custom hash partitioning and processed by <strong>2 reducer processes</strong>.
+</p>
+
+<p>
+The final analysis successfully identified the total number of songs associated with <strong>9 different music directors</strong>. Among them, <strong>Anirudh Ravichander</strong> had the highest number of songs in the current dataset, with a total of <strong>6 songs</strong>.
 </p>
 
 <p>
@@ -780,4 +997,17 @@ Overall, this project provides practical knowledge of <strong>parallel processin
 <strong>S. YUVASRI</strong><br>
 BACHELOR OF COMPUTER APPLICATIONS (BCA)<br>
 KAMARAJ COLLEGE, THOOTHUKUDI, TAMIL NADU
+</p>
+
+<p align="center">
+<strong>PROJECT:</strong> SPOTIFY TAMIL MOVIE SONG ANALYTICS USING DISTRIBUTED MAPREDUCE ENGINE<br>
+<strong>WEEK:</strong> 2<br>
+<strong>DOMAIN:</strong> BIG DATA ANALYTICS<br>
+<strong>PROGRAMMING LANGUAGE:</strong> PYTHON
+</p>
+
+<hr>
+
+<p align="center">
+<strong>MAPREDUCE JOB COMPLETED SUCCESSFULLY</strong>
 </p>
