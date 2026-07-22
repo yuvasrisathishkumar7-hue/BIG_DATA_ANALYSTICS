@@ -66,5 +66,4 @@ Replace the filename with any `.bin` file inside the `meesho_partitions` folder.
 * **Thread Safety:** Each partition file uses its own `threading.Lock()` to prevent concurrent write conflicts.
 * **Malformed Log Handling:** The simulator occasionally sends invalid log entries. These fail Regex validation, are rejected, and are counted as **REJECTED** in the live statistics.
 * **Scalability:** Additional Meesho servers can be added by updating the server list without changing the core harvesting logic, demonstrating dynamic scalability.
-
-===
+  <hr>
