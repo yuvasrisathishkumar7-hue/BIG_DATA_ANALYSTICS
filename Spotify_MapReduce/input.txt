@@ -1,0 +1,21 @@
+Song,MusicDirector,Movie
+Why This Kolaveri Di,Anirudh Ravichander,3
+Vaathi Coming,Anirudh Ravichander,Master
+Arabic Kuthu,Anirudh Ravichander,Beast
+Chellamma,Anirudh Ravichander,Doctor
+Kutti Story,Anirudh Ravichander,Master
+Megham Karukatha,Anirudh Ravichander,Thiruchitrambalam
+Jimikki Ponnu,Thaman S,Varisu
+Ranjithame,Thaman S,Varisu
+Kuthu Vilakku,Thaman S,Indian 2
+Rowdy Baby,Yuvan Shankar Raja,Maari 2
+Aathadi Aathadi,Yuvan Shankar Raja,Anegan
+Oru Naalil,Yuvan Shankar Raja,Pudhupettai
+Katchi Sera,Santhosh Narayanan,Think Indie
+Enjoy Enjaami,Santhosh Narayanan,Independent
+Naan Nee,Santhosh Narayanan,Madras
+Kaathalae Kaathalae,Justin Prabhakaran,96
+The Life of Ram,Pradeep Kumar,96
+Maruvaarthai,Darbuka Siva,Enai Noki Paayum Thota
+Nenjame,Nivas K Prasanna,Doctor
+Inkem Inkem Inkem Kaavaale,Gopi Sundar,Geetha Govindam
